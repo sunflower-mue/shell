@@ -9,37 +9,47 @@
 int main(void)
 {
 	char input[MAX_COMMAND_LEN];
-	ssize_t r = read(0, input, MAX_COMMAND_LEN);
-	char newline = '\n';
+	ssize_t r;
+	char newline;
 	char *argv[MAX_ARGS];
-	int argc = parse_command(input, argv);
+	int argc;
 
 	while (1)
 	{
 		display_prompt();
+		r = read(0, input, MAX_COMMAND_LEN);
+
+		if (r < 0)
+		{
+			perror("Read error");
+			exit(1);
+		}
+
 		if (r == 0)
 		{
+			newline = '\n';
 			write(1, &newline, 1);
 			break;
 		}
+
 		if (input[r - 1] == '\n')
 		{
 			input[r - 1] = '\0';
 		}
+		argc = parse_command(input, argv);
 
 		if (argc == 0)
-		{
 			continue;
-		}
-
-		if (write(1, "exit", 4) != -1 && _strcmp(argv[0], "exit"))
+		if (_strcmp(input, "exit\n") == 0)
 		{
-			break;
+			exit(0);
+
 		}
+		
 		if (execute_command(argv) == -1)
 		{
 			return (EXIT_FAILURE);
 		}
 	}
-	return (0);
+		return (0);
 }
