@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -19,6 +20,6 @@ int execute_command(char **argv);
 int _strlen(char *s);
 int _strcmp(const char *str1, const char *str2);
 char *_strcpy(char *dest, char *src);
-
+char *_strdup(const char *src);
 
 #endif

@@ -11,6 +11,8 @@ int main(void)
 	char input[MAX_COMMAND_LEN];
 	ssize_t r = read(0, input, MAX_COMMAND_LEN);
 	char newline = '\n';
+	char *argv[MAX_ARGS];
+	int argc = parse_command(input, argv);
 
 	while (1)
 	{
@@ -24,8 +26,6 @@ int main(void)
 		{
 			input[r - 1] = '\0';
 		}
-		char *argv[MAX_ARGS];
-		int argc = parse_command(input, argv);
 
 		if (argc == 0)
 		{
@@ -41,6 +41,5 @@ int main(void)
 			return (EXIT_FAILURE);
 		}
 	}
-	free_arguments(argv);
 	return (0);
 }

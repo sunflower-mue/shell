@@ -22,7 +22,7 @@ int parse_command(char *input, char **argv)
 
 	while (token && argc < MAX_ARGS - 1)
 	{
-		argv[argc] = _strcpy(token);
+		argv[argc] = _strdup(token);
 		token = strtok(NULL, "\t\n");
 		argc++;
 	}
@@ -54,6 +54,7 @@ void free_arguments(char **argv)
 int execute_command(char **argv)
 {
 	pid_t child_pid = fork();
+	char err[] = "Command not found: ";
 
 	if (child_pid == -1)
 	{
@@ -65,10 +66,8 @@ int execute_command(char **argv)
 	{
 		execve(argv[0], argv, environ);
 
-		char err = "Command not found: ";
-
 		write(STDERR_FILENO, err, _strlen(err));
-		write(STDERR_FILENO, argv[0], _strlen(argv[0]);
+		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
 		write(STDERR_FILENO, "\n", 1);
 		_exit(EXIT_FAILURE);
 	}
