@@ -1,9 +1,4 @@
-**update the code here with the one on paper that doesn't have functions or system calls that aren't allowed.
-
-**adhere to betty style
-
-**compile and test code.
-
-*debugg.
-
-*ensure there are no memory leaks.
+**compile with required gcc
+**memory leaks
+**free _strcpy done. see if anything needs to be freed
+**betty on strcpy

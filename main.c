@@ -1,41 +1,46 @@
 #include "shell.h"
 
-int main()
+/**
+ * main - Entry Point to shell.
+ *
+ * Return: Success(0).
+ */
+
+int main(void)
 {
 	char input[MAX_COMMAND_LEN];
+	ssize_t r = read(0, input, MAX_COMMAND_LEN);
+	char newline = '\n';
 
-	while(1)
+	while (1)
 	{
 		display_prompt();
-		ssize_t read_size = read(STDIN_FILENO, input, sizeof(input));
-
-		if(read_size == 0)
+		if (r == 0)
 		{
-			printf("\n");
+			write(1, &newline, 1);
 			break;
 		}
-
-		if(input[read_size -1] == '\n')
+		if (input[r - 1] == '\n')
 		{
-			input[read_size -1] = '\0';
+			input[r - 1] = '\0';
 		}
-
 		char *argv[MAX_ARGS];
 		int argc = parse_command(input, argv);
 
-		if(argc == 0)
+		if (argc == 0)
 		{
 			continue;
 		}
 
-		if(execute_command(argv) == -1)
+		if (write(1, "exit", 4) != -1 && _strcmp(argv[0], "exit"))
+		{
+			break;
+		}
+		if (execute_command(argv) == -1)
 		{
 			return (EXIT_FAILURE);
 		}
-
-		free_arguments(argv);
 	}
-
+	free_arguments(argv);
 	return (0);
-
 }
