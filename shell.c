@@ -54,7 +54,7 @@ void free_arguments(char **argv)
 int execute_command(char **argv)
 {
 	pid_t child_pid = fork();
-	char err[] = "Command not found: ";
+	char err[] = ": No such file or directory ";
 
 	if (child_pid == -1)
 	{
@@ -66,8 +66,8 @@ int execute_command(char **argv)
 	{
 		execve(argv[0], argv, environ);
 
-		write(STDERR_FILENO, err, _strlen(err));
 		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+		write(STDERR_FILENO, err, _strlen(err));
 		write(STDERR_FILENO, "\n", 1);
 		_exit(EXIT_FAILURE);
 	}
