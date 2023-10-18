@@ -12,20 +12,20 @@ int main(void)
 	ssize_t r;
 	char newline;
 	char *argv[MAX_ARGS];
-	int argc;
+	int argc, status;
 
 	while (1)
 	{
 		display_prompt();
 		r = read(0, input, MAX_COMMAND_LEN);
-
+		
 		if (r < 0)
 		{
 			perror("Read error");
 			exit(1);
 		}
 
-		if (r == 0)
+		if (!r)
 		{
 			newline = '\n';
 			write(1, &newline, 1);
@@ -36,20 +36,31 @@ int main(void)
 		{
 			input[r - 1] = '\0';
 		}
-		argc = parse_command(input, argv);
 
-		if (argc == 0)
-			continue;
-		if (_strcmp(input, "exit\n") == 0)
+		if (_strcmp(input, "exit"))
 		{
 			exit(0);
+		}
+		argc = parse_command(input, argv);
 
+		if (argc > 0)
+		{
+			if (access(argv[0], X_OK) == 0)
+			{
+				status = execute_command(argv);
+				if (status == -1)
+				{
+					perror("Execution error");
+				}
+			}
+			else
+			{
+				printf("Command not found: %s\n", argv[0]);
+			}
+
+			free_arguments(argv);
 		}
 		
-		if (execute_command(argv) == -1)
-		{
-			return (EXIT_FAILURE);
-		}
 	}
 		return (0);
 }
