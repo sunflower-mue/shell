@@ -10,7 +10,6 @@ int main(void)
 {
 	char input[MAX_COMMAND_LEN];
 	ssize_t r;
-	char newline;
 	char *argv[MAX_ARGS];
 	int argc, status;
 
@@ -24,40 +23,26 @@ int main(void)
 			perror("Read error");
 			exit(1);
 		}
-
-		if (!r)
+		if (r == 0)
 		{
-			newline = '\n';
-			write(1, &newline, 1);
+			write(1, "\n", 1);
 			break;
 		}
-
 		if (input[r - 1] == '\n')
-		{
 			input[r - 1] = '\0';
-		}
-
 		if (_strcmp(input, "exit"))
-		{
 			exit(0);
-		}
 		argc = parse_command(input, argv);
-
 		if (argc > 0)
 		{
 			if (access(argv[0], X_OK) == 0)
 			{
 				status = execute_command(argv);
 				if (status == -1)
-				{
 					perror("Execution error");
-				}
 			}
 			else
-			{
 				execute_command(argv);
-			}
-
 			free_arguments(argv);
 		}
 	}
