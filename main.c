@@ -18,7 +18,7 @@ int main(void)
 	{
 		display_prompt();
 		r = read(0, input, MAX_COMMAND_LEN);
-		
+
 		if (r < 0)
 		{
 			perror("Read error");
@@ -55,12 +55,11 @@ int main(void)
 			}
 			else
 			{
-				printf("Command not found: %s\n", argv[0]);
+				execute_command(argv);
 			}
 
 			free_arguments(argv);
 		}
-		
 	}
 		return (0);
 }

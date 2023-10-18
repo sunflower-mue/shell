@@ -13,7 +13,7 @@ extern char **environ;
 #define MAX_COMMAND_LEN 1024
 #define MAX_ARGS 32
 
-void display_prompt();
+void display_prompt(void);
 int parse_command(char *input, char **argv);
 void free_arguments(char **argv);
 int execute_command(char **argv);
